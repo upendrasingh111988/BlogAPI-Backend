@@ -19,6 +19,8 @@ import com.blog.myblogapi.response.ApiResponse;
 import com.blog.myblogapi.services.UserService;
 import com.blog.myblogapi.userRepo.UserRepo;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("api/users")
 public class UserController {
@@ -27,7 +29,7 @@ public class UserController {
 	private UserService userService;
 	
 	@PostMapping("/createUser")
-	public ResponseEntity<UserDTO> createUsers(@RequestBody UserDTO userDTO){
+	public ResponseEntity<UserDTO> createUsers(@Valid @RequestBody UserDTO userDTO){
 	UserDTO userdto4=	this.userService.createUser(userDTO);
 		return new ResponseEntity<>(userdto4,HttpStatus.CREATED);
 		
