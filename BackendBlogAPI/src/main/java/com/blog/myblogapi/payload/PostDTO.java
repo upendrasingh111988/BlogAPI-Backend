@@ -15,10 +15,11 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
+
 public class PostDTO {
 
+	private int postId;
+	
 	private String postTitle;
 	
 	private String content;

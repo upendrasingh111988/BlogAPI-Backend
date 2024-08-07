@@ -19,6 +19,7 @@ import com.blog.myblogapi.userRepo.CategoryRepo;
 import com.blog.myblogapi.userRepo.PostRepo;
 import com.blog.myblogapi.userRepo.UserRepo;
 
+
 @Service
 public class PostServiceImpl implements PostService {
 	
@@ -83,7 +84,7 @@ public class PostServiceImpl implements PostService {
 	List<Post>posts=postRepo.findByCategory(cate);
 	
 	List<PostDTO> postdtos=	posts.stream()
-			.map((post)->this.modelMapper.map(posts, PostDTO.class)).collect(Collectors.toList());
+			.map(ecat->this.modelMapper.map(ecat, PostDTO.class)).collect(Collectors.toList());
 	
 		return postdtos;
 	}
@@ -92,9 +93,12 @@ public class PostServiceImpl implements PostService {
 	public List<PostDTO> getPostByUser(Integer userid) {
 		User user= userRepo.findById(userid)
 				.orElseThrow(()-> new ResourceNotFoundException("User", "User id", userid));
-		
+		System.out.println("User details::"+ user);
 		List<Post>posts= postRepo.findByUser(user);
-		List<PostDTO>postdetos=	posts.stream().map((post)->this.modelMapper.map(posts, PostDTO.class))
+		
+		System.out.println("Post details::"+ posts);
+		
+		List<PostDTO>postdetos=	posts.stream().map(post->this.modelMapper.map(post, PostDTO.class))
 				.collect(Collectors.toList());
 		
 		return postdetos;
