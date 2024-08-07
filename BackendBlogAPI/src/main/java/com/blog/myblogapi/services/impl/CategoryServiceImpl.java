@@ -41,7 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public CategoryDTO updateUser(CategoryDTO categoryDTO, Integer categoryId) {
 		Category cate2= categoryRepo.findById(categoryId)
 				.orElseThrow(()-> new ResourceNotFoundException("Category", "categoryId",categoryId));
-		cate2.setCategoryId(categoryDTO.getCategoryId());
+		//cate2.setCategoryId(categoryDTO.getCategoryId());
 		cate2.setCategoryTitle(categoryDTO.getCategoryTitle());
 		cate2.setCategoryDescription(categoryDTO.getCategoryDescription());
 		

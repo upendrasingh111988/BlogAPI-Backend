@@ -19,6 +19,8 @@ import com.blog.myblogapi.payload.CategoryDTO;
 import com.blog.myblogapi.response.ApiResponse;
 import com.blog.myblogapi.services.CategoryService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("api/categories")
 public class CategoryController {
@@ -29,7 +31,7 @@ public class CategoryController {
 	private ModelMapper modelMapper;
 	
 	@PostMapping("/createcat")
-	public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO){
+	public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO){
 		
 		CategoryDTO categoryDTO2=categoryService.createUser(categoryDTO);
 		
@@ -51,6 +53,7 @@ public class CategoryController {
 		categoryService.deleteUser(categoryId);
 		return new ResponseEntity<ApiResponse>(new ApiResponse("category deleted successfully..",true),HttpStatus.OK);
 	}
+	
 	@GetMapping("/{categoryId}")
 	public ResponseEntity<CategoryDTO> getSingleCategory(@PathVariable Integer categoryId){
 		CategoryDTO singlecate=	categoryService.getSingleBlogCategory(categoryId);
