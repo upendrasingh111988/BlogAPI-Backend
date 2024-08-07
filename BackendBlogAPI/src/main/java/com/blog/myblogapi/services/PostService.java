@@ -9,11 +9,11 @@ public interface PostService {
 	
 	PostDTO createPost(PostDTO postDTO, Integer userid , Integer categoryId);
 	
-	List<Post> getAllPost();
+	List<PostDTO> getAllPost();
 	
-	Post getSinglePost(Integer postId);
+	PostDTO getSinglePost(Integer postId);
 
-	Post updatePost(PostDTO postDTO , Integer postId);
+	PostDTO updatePost(PostDTO postDTO , Integer postId);
 	
 	void deletePost(Integer postId);
 	

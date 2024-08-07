@@ -53,26 +53,43 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<Post> getAllPost() {
-		
-		return null;
+	public List<PostDTO> getAllPost() {
+	List<Post>posts = postRepo.findAll();
+	List<PostDTO>updatedposts=	posts.stream().map(e->this.modelMapper.map(e, PostDTO.class))
+				.collect(Collectors.toList());
+		return updatedposts;
 	}
 
 	@Override
-	public Post getSinglePost(Integer postId) {
-		
-		return null;
+	public PostDTO getSinglePost(Integer postId) {
+		Post pos=postRepo.findById(postId)
+				.orElseThrow(()-> new ResourceNotFoundException("Post", "Post Id", postId));
+	PostDTO postdtos=	this.modelMapper.map(pos, PostDTO.class);
+		return postdtos ;
 	}
 
 	@Override
-	public Post updatePost(PostDTO postDTO, Integer postId) {
+	public PostDTO updatePost(PostDTO postDTO, Integer postId) {
 		
-		return null;
+		Post postfetchingfromdb=postRepo.findById(postId)
+				.orElseThrow(()-> new ResourceNotFoundException("Post", "id", postId));
+		postfetchingfromdb.setPostTitle(postDTO.getPostTitle());
+		postfetchingfromdb.setContent(postDTO.getContent());
+		postfetchingfromdb.setImageName(postDTO.getImageName());
+		//postfetchingfromdb.setAddedDate(postDTO.getAddedDate());
+		Post updateddatainDb=	postRepo.save(postfetchingfromdb);
+	
+		PostDTO pos = this.modelMapper.map(updateddatainDb, PostDTO.class);
+		
+		
+		return pos;
 	}
 
 	@Override
 	public void deletePost(Integer postId) {
-	
+		Post postfetchingbyparticularid	=postRepo.findById(postId)
+					.orElseThrow(()-> new ResourceNotFoundException("Post", "id", postId));
+		postRepo.delete(postfetchingbyparticularid);
 		
 	}
 
