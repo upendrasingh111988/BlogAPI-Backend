@@ -2,6 +2,7 @@ package com.blog.myblogapi.services.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import com.blog.myblogapi.model.Category;
 import com.blog.myblogapi.model.Post;
 import com.blog.myblogapi.model.User;
 import com.blog.myblogapi.payload.PostDTO;
+import com.blog.myblogapi.payload.UserDTO;
 import com.blog.myblogapi.services.PostService;
 import com.blog.myblogapi.userRepo.CategoryRepo;
 import com.blog.myblogapi.userRepo.PostRepo;
@@ -74,15 +76,28 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<Post> getPostByCategory(Integer categoryId) {
+	public List<PostDTO> getPostByCategory(Integer categoryId) {
+		Category cate=categoryRepo.findById(categoryId)
+				.orElseThrow(()-> new ResourceNotFoundException("category", "id", categoryId));
 		
-		return null;
+	List<Post>posts=postRepo.findByCategory(cate);
+	
+	List<PostDTO> postdtos=	posts.stream()
+			.map((post)->this.modelMapper.map(posts, PostDTO.class)).collect(Collectors.toList());
+	
+		return postdtos;
 	}
 
 	@Override
-	public List<Post> getPostByUser(Integer userid) {
+	public List<PostDTO> getPostByUser(Integer userid) {
+		User user= userRepo.findById(userid)
+				.orElseThrow(()-> new ResourceNotFoundException("User", "User id", userid));
 		
-		return null;
+		List<Post>posts= postRepo.findByUser(user);
+		List<PostDTO>postdetos=	posts.stream().map((post)->this.modelMapper.map(posts, PostDTO.class))
+				.collect(Collectors.toList());
+		
+		return postdetos;
 	}
 
 	@Override
