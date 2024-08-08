@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.myblogapi.model.Post;
@@ -60,9 +61,12 @@ public class PostController {
 		
 		// get all post
 		@GetMapping("allposts")
-		public List<PostDTO> getAllPosts(){
+		public List<PostDTO> getAllPosts(
+				@RequestParam(value = "pageNumber",defaultValue = "1",required = false) Integer pageNumber,
+				@RequestParam(value = "pageSize",defaultValue = "8",required = false) Integer pageSize
+				){
 			
-			List<PostDTO>allposts=postService.getAllPost();
+			List<PostDTO>allposts=postService.getAllPost(pageNumber,pageSize);
 			return allposts;
 		}
 // get single post
