@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.blog.myblogapi.exception.ResourceNotFoundException;
@@ -17,6 +18,7 @@ import com.blog.myblogapi.model.Post;
 import com.blog.myblogapi.model.User;
 import com.blog.myblogapi.payload.PostDTO;
 import com.blog.myblogapi.payload.UserDTO;
+import com.blog.myblogapi.response.PostResponse;
 import com.blog.myblogapi.services.PostService;
 import com.blog.myblogapi.userRepo.CategoryRepo;
 import com.blog.myblogapi.userRepo.PostRepo;
@@ -56,16 +58,35 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<PostDTO> getAllPost(Integer pageNumber,Integer pageSize) {
+	public PostResponse getAllPost(Integer pageNumber,Integer pageSize, String sortBy,String sortDir) {
 		/*
 		 * int pageSize=5; int pageNumber=1;
 		 */
-		Pageable p= PageRequest.of(pageNumber, pageSize);
+		/*
+		 * Sort sort=null; if(sortDir.equalsIgnoreCase("asc")) { sort=
+		 * Sort.by(sortBy).ascending();
+		 * 
+		 * }else {
+		 * 
+		 * sort=Sort.by(sortBy).descending(); }
+		 */
+		Sort sort= (sortDir.equalsIgnoreCase("asc"))?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+		
+		Pageable p= PageRequest.of(pageNumber, pageSize,Sort.by(sortBy).descending());
+		
 		Page<Post>pagepost=	postRepo.findAll(p);
 		List<Post>allposts=pagepost.getContent();
 	List<PostDTO>updatedposts=	allposts.stream().map(e->this.modelMapper.map(e, PostDTO.class))
 				.collect(Collectors.toList());
-		return updatedposts;
+	PostResponse postResponse= new PostResponse();
+	postResponse.setContent(updatedposts);
+	postResponse.setPageNumber(pagepost.getNumber());
+	postResponse.setPageSize(pagepost.getSize());
+	postResponse.setTotalelemets(pagepost.getNumberOfElements());
+	postResponse.setTotalpages(pagepost.getTotalPages());
+	postResponse.setLastPage(pagepost.isLast());
+	
+		return postResponse;
 	}
 
 	@Override

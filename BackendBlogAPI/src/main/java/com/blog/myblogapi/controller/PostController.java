@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.blog.myblogapi.model.Post;
 import com.blog.myblogapi.payload.PostDTO;
 import com.blog.myblogapi.response.ApiResponse;
+import com.blog.myblogapi.response.PostResponse;
 import com.blog.myblogapi.services.PostService;
 
 @RestController
@@ -61,13 +62,15 @@ public class PostController {
 		
 		// get all post
 		@GetMapping("allposts")
-		public List<PostDTO> getAllPosts(
-				@RequestParam(value = "pageNumber",defaultValue = "1",required = false) Integer pageNumber,
-				@RequestParam(value = "pageSize",defaultValue = "8",required = false) Integer pageSize
+		public ResponseEntity<PostResponse>  getAllPosts(
+				@RequestParam(value = "pageNumber",defaultValue = "0",required = false) Integer pageNumber,
+				@RequestParam(value = "pageSize",defaultValue = "10",required = false) Integer pageSize,
+				@RequestParam(value = "sortBy", defaultValue = "postId", required = false) String sortBy,
+				@RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
 				){
 			
-			List<PostDTO>allposts=postService.getAllPost(pageNumber,pageSize);
-			return allposts;
+			 PostResponse postresponse = postService.getAllPost(pageNumber,pageSize,sortBy,sortDir);
+			return  new ResponseEntity<PostResponse>(postresponse,HttpStatus.OK);
 		}
 // get single post
 		@GetMapping("post/{postId}")
