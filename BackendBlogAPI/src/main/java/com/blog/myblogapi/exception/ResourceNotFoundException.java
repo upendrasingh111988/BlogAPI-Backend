@@ -7,12 +7,13 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Builder
+
 @Data
 public class ResourceNotFoundException extends RuntimeException {
 	String resourceName;
 	String fieldName;
 	long fieldValue;
+	String email;
 	public ResourceNotFoundException(String resourceName, String fieldName, long fieldValue) {
 		super(String.format("%s Resource Not Sound %s" , resourceName,fieldName,fieldValue));
 		this.resourceName = resourceName;
@@ -20,6 +21,10 @@ public class ResourceNotFoundException extends RuntimeException {
 		this.fieldValue = fieldValue;
 	}
 	
-	
-
+	/*
+	 * public ResourceNotFoundException(String resourceName, String fieldName,
+	 * String email) { super(String.format("%s Resource Not Sound %s" ,
+	 * resourceName,fieldName,email)); this.resourceName = resourceName;
+	 * this.fieldName = fieldName; this.email = email; }
+	 */
 }

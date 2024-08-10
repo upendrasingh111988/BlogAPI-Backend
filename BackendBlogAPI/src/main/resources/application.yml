@@ -19,7 +19,20 @@ spring:
         100MB
       max-request-size:
         100MB
+#  security:
+#    user:
+#      name: upendra
+#      password: Upen@1988
         
         
 project.image:
   images/
+  
+  
+logging:
+  level:
+     org.springframework.web: DEBUG
+     guru.springframework.controllers: DEBUG
+     org.hibernate: DEBUG
+     org: INFO
+     
