@@ -5,12 +5,16 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.blog.myblogapi.config.AppConstants;
 import com.blog.myblogapi.exception.ResourceNotFoundException;
+import com.blog.myblogapi.model.Role;
 import com.blog.myblogapi.model.User;
 import com.blog.myblogapi.payload.UserDTO;
 import com.blog.myblogapi.services.UserService;
+import com.blog.myblogapi.userRepo.RoleRepo;
 import com.blog.myblogapi.userRepo.UserRepo;
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,6 +24,12 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private RoleRepo roleRepo;
 
 	@Override
 	public UserDTO createUser(UserDTO userDTO) {
@@ -89,6 +99,21 @@ public class UserServiceImpl implements UserService {
 				.orElseThrow(()-> new ResourceNotFoundException("User", "id", userid));
 		userRepo.delete(user);
 		
+	}
+
+	@Override
+	public UserDTO registerNewUser(UserDTO userDTO) {
+
+		User user = modelMapper.map(userDTO, User.class);
+		// user
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		//roles
+		Role role = roleRepo.findById(AppConstants.NORMAL_USER).get();
+		
+		user.getRoles().add(role);
+		
+		User newUser = userRepo.save(user);
+		return modelMapper.map(newUser, UserDTO.class);
 	}
 
 

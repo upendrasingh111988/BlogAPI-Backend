@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -21,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+//@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig{
 	
 
@@ -35,7 +38,7 @@ public class SecurityConfig{
         http
             .csrf().disable()
             .authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/api/authenticate").permitAll() // Allow access to authenticate endpoint
+                .requestMatchers("/api/auth/**").permitAll() // Allow access to authenticate endpoint
                 .anyRequest().authenticated() // All other endpoints require authentication
             )
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Use stateless session

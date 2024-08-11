@@ -1,5 +1,10 @@
 package com.blog.myblogapi.payload;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.blog.myblogapi.model.Role;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -25,5 +30,7 @@ public class UserDTO {
 	private String about;
 	@NotBlank
 	private String password;
+	
+	private Set<RoleDTO>roles= new HashSet<>();
 
 }

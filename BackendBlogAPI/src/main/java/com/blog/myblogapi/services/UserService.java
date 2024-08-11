@@ -9,13 +9,15 @@ import com.blog.myblogapi.payload.UserDTO;
 
 public interface UserService {
 	
-	UserDTO createUser(@RequestBody UserDTO userDTO);
+	UserDTO registerNewUser(UserDTO userDTO);
+	
+	UserDTO createUser(UserDTO userDTO);
 	
 	List<UserDTO> getAllBlogUsers();
 	
-	UserDTO getSingleBlogUser(@PathVariable Integer userid);
+	UserDTO getSingleBlogUser(Integer userid);
 	
-	UserDTO updateUser(@RequestBody UserDTO userDTO , @PathVariable Integer userid);
+	UserDTO updateUser( UserDTO userDTO , Integer userid);
 	
 	void deleteUser(@PathVariable Integer userid);
 
