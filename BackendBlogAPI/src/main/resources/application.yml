@@ -23,7 +23,13 @@ spring:
 #    user:
 #      name: upendra
 #      password: Upen@1988
-        
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    
         
 project.image:
   images/
