@@ -1,49 +1,58 @@
 package com.blog.myblogapi.config;
 
-import org.hibernate.mapping.Collection;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.service.VendorExtension;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.service.VendorExtension;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import io.jsonwebtoken.lang.Collections;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
+
+import io.swagger.v3.oas.models.ExternalDocumentation;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 
 @Configuration
 public class SwagggerConfig {
+	private static final String AUTHORIZATION_HEADER= "Authorization";
+	
+	private ApiKey apikeys() {
+		
+		return new ApiKey("jwt", AUTHORIZATION_HEADER, "headre");
+		
+	}
+	
+	private List<SecurityReference> sf(){
+		AuthorizationScope scope= new AuthorizationScope("global", "accesseverything");
+		return Arrays.asList(new SecurityReference("jwt", new AuthorizationScope[] {scope}));
+		
+	}
+	private List<SecurityContext> securityContexts(){
+		return Arrays.asList(SecurityContext.builder().securityReferences(sf()).build());
+	}
 
-	  @Bean
-	    public Docket api() {
-	        return new Docket(DocumentationType.SWAGGER_2)
-	                .apiInfo(createApiInfo())
-	                .select()
-	                .apis(RequestHandlerSelectors.basePackage("com.blog.myblogapi"))  // Specify your base package
-	                .paths(PathSelectors.any())
-	                .build();
-	    }
-
-	  private ApiInfo createApiInfo() {
-	        return new ApiInfo(
-	                "Blogging Application: Backend",
-	                "This is a development API for blogging",
-	                "1.0",
-	                "Terms of service URL",
-	                new Contact("Upendra", "http://google.com", "Upen@gmail.com"),
-	                "API License",
-	                "http://google.com/license",
-	                
-	                Collections.arrayToList(null));
+	
+	
+	 @Bean
+	    public OpenAPI customOpenAPI() {
+	        return new OpenAPI()
+	                .info(new Info()
+	                        .title("Blogging Application: Backend")
+	                        .description("This is a development API for blogging")
+	                        .version("1.0")
+	                        .termsOfService("Terms of service URL")
+	                        .contact(new Contact()
+	                                .name("Upendra")
+	                                .url("http://google.com")
+	                                .email("Upen@gmail.com"))
+	                        .license(new io.swagger.v3.oas.models.info.License()
+	                                .name("API License")
+	                                .url("http://google.com/license")))
+	                .externalDocs(new ExternalDocumentation()
+	                        .description("Additional Documentation")
+	                        .url("http://google.com"));
 	    }
 }

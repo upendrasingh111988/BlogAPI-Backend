@@ -36,11 +36,11 @@ public class BackendBlogApiApplication implements CommandLineRunner {
 		try {
 			Role roles= new Role();
 			roles.setRoleId(AppConstants.ADMIN_USER);
-			roles.setName("ADMIN_USER");
+			roles.setName("ROLE_ADMIN");
 			
 			Role roles1= new Role();
 			roles1.setRoleId(AppConstants.NORMAL_USER);
-			roles1.setName("NORMAL_USER");
+			roles1.setName("ROLE_NORMAL");
 			List<Role> roles3 = List.of(roles , roles1);
 			
 			List<Role> result = roleRepo.saveAll(roles3);
